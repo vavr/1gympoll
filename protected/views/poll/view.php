@@ -29,7 +29,7 @@ $results = $model->results;
 
 if ($results) {
 
-    echo 'Всего проголосовало: <strong>'.count($results).'</strong><br><br>';
+    echo 'Всего проголосовало: <strong>'.count($results).'</strong> из <strong>'.count($pollUsers).'</strong><br><br>';
 
     $this->renderPartial('results/result_'.$model->id, array('model' => $model));
 } else {

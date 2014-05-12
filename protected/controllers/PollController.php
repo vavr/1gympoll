@@ -48,9 +48,11 @@ class PollController extends Controller
 	public function actionView($id)
 	{
         $model = $this->loadModel($id);
+        $pollUsers = PollUser::model()->findAll();
 
         $this->render('view',array(
-			'model'=>$model
+			'model'=>$model,
+            'pollUsers' => $pollUsers
 		));
 	}
 
