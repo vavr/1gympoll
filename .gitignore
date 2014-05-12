@@ -1,0 +1,7 @@
+!.gitignore
+assets/*
+vendor/
+protected/runtime/*
+composer.lock
+.idea/
+protected/config/*.local.php
