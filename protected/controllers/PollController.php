@@ -32,7 +32,7 @@ class PollController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete', 'create','update', 'importUsers', 'sendInvites'),
+				'actions'=>array(),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -232,4 +232,26 @@ class PollController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+    public function actionInvite()
+    {
+        $info = array();
+        $request = Yii::app()->request;
+        if ($request->getPost('invite')) {
+
+            if (!$request->getPost('pollId')) {
+                throw new CHttpException(400, 'Выбирете голосование');
+            }
+
+            $info = Yii::app()->poll->sendInvitesToPoll($request->getPost('pollId'), $request->getPost('message'));
+        }
+
+        $polls = Poll::model()->findAll('is_ended = 0 AND untill_date > :now', array(':now' => date('Y-m-d H:i:s')));
+
+        $this->render('invite',array(
+            'info' => $info,
+            'polls' => $polls,
+            'message' => $request->getPost('message'),
+        ));
+    }
 }

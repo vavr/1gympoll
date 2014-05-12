@@ -27,7 +27,7 @@ $conf = array(
 		// uncomment the following to enable the Gii tool
         'gii'=>array(
             'class'=>'system.gii.GiiModule',
-            'password'=>'fufel',
+            'password'=>'',
             // 'ipFilters'=>array(…список IP…),
             // 'newFileMode'=>0666,
             // 'newDirMode'=>0777,
@@ -39,6 +39,11 @@ $conf = array(
 	'components'=>array(
         'poll' => array(
             'class'=>'PollComponent',
+        ),
+        'email'=>array(
+            'class'=>'application.extensions.email.Email',
+            'delivery'=>'php', //Will use the php mailing function.
+            //May also be set to 'debug' to instead dump the contents of the email into the view
         ),
 
 		// uncomment the following to enable URLs in path-format
@@ -89,7 +94,8 @@ $conf = array(
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// this is used in contact page
-		'adminEmail' => 'igor.vavrjin@gmail.com',
+		'adminEmail' => 'admin@site.com',
+        'fromEmail' => 'admin@site.com',
         'adminUsers' => array('admin'=>'admin'),
         'host' => 'gympoll.local',
 	),

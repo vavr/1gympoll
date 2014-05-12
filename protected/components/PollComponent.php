@@ -66,12 +66,17 @@ class PollComponent extends CApplicationComponent
 
     public function sendInvitesToPoll($pollId, $message = '')
     {
+        mb_internal_encoding('UTF-8');
         /**
          * @var Poll $poll
          */
         $poll = Poll::model()->findByPk($pollId);
 
+        $stats = array('sended' => 0, 'total' => 0, 'fail' => 0);
+
         foreach ($this->getUsers() as $user) {
+
+            $stats['total']++;
 
             $partUrl = '&id='.$pollId.'&hash='.$this->getHashForUserAndPoll($pollId, $user);
 
@@ -80,12 +85,15 @@ class PollComponent extends CApplicationComponent
              */
             $mailer = Yii::app()->email;
 
-            $mailer->from = Yii::app()->params['adminEmail'];
+            $mailer->from = Yii::app()->params['fromEmail'];
             $mailer->to = $user->email;
-            $mailer->subject = 'Голосование '.$poll->name;
-            $mailer->message = $message . ' http://'.Yii::app()->params['host'].'/index.php?r=poll/vote'.$partUrl;
-            $mailer->send();
+            $mailer->subject = 'Гимназия №1 - Голосование '.$poll->name;
+            $mailer->message = nl2br($message) . '<br><br>Ссылка на голосование: http://'.Yii::app()->params['host'].'/index.php?r=poll/vote'.$partUrl.'<br><br>Если возникнут какие-либо проблемы или вопросы - пишите на почту '.Yii::app()->params['adminEmail'];
+            $result = $mailer->send();
+            $result ? $stats['sended']++ :$stats['fail']++;
         }
+
+        return $stats;
     }
 
     public function importUsers($csvFileName, $delim = ',')
